@@ -18,12 +18,14 @@
     </div>
 
     <div class="d-flex justify-content-center align-items-centre gap-2">
-      <a href='Movies.html' class="head-btn btn d-none d-lg-block text-white">Movies</a>
-      <a href='tv shows.html' class="head-btn btn  d-none d-lg-block text-white ">TV Shows</a>
+      <a href='Movies.html' class="head-btn btn d-none d-lg-block text-white fw-bold">Movies</a>
+      <a href='tvshows.html' class="head-btn btn  d-none d-lg-block text-white fw-bold">TV Shows</a>
     </div>
-  
+
     <div class="position-absolute top-50 start-50 translate-middle d-lg-none">
-      <div class="text-white text-center fw-bold" style="font-size: 2rem;">Cineverse</div>
+      <a href="index.html" style="text-decoration: none">
+        <div class="text-white text-center fw-bold" style="font-size: 2.5rem;">Cineverse</div>
+      </a>
     </div>
 
 
@@ -49,7 +51,7 @@
           <a href='Movies.html' class="menu-btn btn bg-danger d-lg-none">Movies</a>
       </li>
       <li>
-        <a href='tv shows.html' class="menu-btn btn bg-danger d-lg-none">TV Shows</a>
+        <a href='tvshows.html' class="menu-btn btn bg-danger d-lg-none">TV Shows</a>
       </li>
         <li>
           <button class="menu-btn" onclick="toggleSubMenu('genres')">Genres ▾</button>
@@ -72,8 +74,8 @@
           <button class="menu-btn" onclick="toggleSubMenu('trending')">Trending ▾</button>
           <ul class="submenu" id="trending">
             <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
-              <a href='Trending today.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">Today</a>
-              <a href='This Week.html' class="btn text-white btn-outline-danger category-btn" data-category="War">This Week</a>
+              <a href='Trendingtoday.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">Today</a>
+              <a href='ThisWeek.html' class="btn text-white btn-outline-danger category-btn" data-category="War">This Week</a>
             </div>
           </ul>
         </li>
@@ -81,8 +83,8 @@
           <button class="menu-btn" onclick="toggleSubMenu('topRated')">Top Rated ▾</button>
           <ul class="submenu" id="topRated">
             <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
-              <a href='All time.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">All Time</a>
-              <a href='This Year.html' class="btn text-white btn-outline-danger category-btn" data-category="War">This Year</a>
+              <a href='Alltime.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">All Time</a>
+              <a href='ThisYear.html' class="btn text-white btn-outline-danger category-btn" data-category="War">This Year</a>
             </div>
           </ul>
         </li>
@@ -102,49 +104,7 @@
   </section>
 
   <script src="script.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const apiKey = '447bbae2e176863ed6ad30d6b10ecdd9';
 
-      const urlquery = new URLSearchParams(window.location.search);
-      const query = urlquery.get('query');
-      document.getElementById('searchQuery').textContent = query;
-
-      const searchUrl = `https://api.themoviedb.org/3/search/multi?api_key=${apiKey}&query=${encodeURIComponent(query)}`;
-
-      fetch(searchUrl)
-        .then(response => response.json())
-        .then(data => {
-          const resultsContainer = document.getElementById('resultsContainer');
-          if (data.results.length === 0) {
-            resultsContainer.innerHTML = '<p>No results found.</p>';
-            return;
-          }
-          
-          const movies = data.results;
-          movies.forEach(movie => {
-            if (!movie.poster_path) return;
-            
-            const title = movie.title || movie.name || "No Title";
-            const poster = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-
-            const moviecard = document.createElement('div');
-            moviecard.classList.add('movie-card');
-            moviecard.innerHTML = `
-              <a href="movie-details.html?id=${movie.id}">
-                  <img src="${poster}" alt="${title}" style="width: 200px; border-radius: 10px;">
-                  <h5 class="mt-2">${title}</h5>
-              </a>`;
-
-            resultsContainer.appendChild(moviecard);
-          });
-        })
-        .catch(error => {
-          console.error('Search error:', error);
-          document.getElementById('resultsContainer').innerHTML = '<p>Error loading results.</p>';
-        });
-    });
-  </script>
 
 </body>
 </html>
