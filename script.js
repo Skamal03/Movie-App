@@ -1,40 +1,9 @@
-// For the home page
-const apiKey = '447bbae2e176863ed6ad30d6b10ecdd9';
-
-const apiUrl = `https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}&language=en-US&page=1`;
-
-const movieContainer = document.querySelector('.movies');
-
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-    const movies = data.results;
-    movieContainer.innerHTML = '';
-
-    movies.forEach(movie => {
-      const posterUrl = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-      const movieCard = document.createElement('div');
-      movieCard.classList.add('movie-card');
-
-      movieCard.innerHTML = `
-        <img src="${posterUrl}" alt="${movie.title}">
-        <h3>${movie.title}</h3>
-      `;
-
-      movieContainer.appendChild(movieCard);
-    });
-  })
-  .catch(error => {
-    console.error('Error fetching movies:', error);
-    movieContainer.innerHTML = '<p>Failed to load movies.</p>';
-  });
-
-  // side Menue
+// side Menu
 const browseBtn = document.getElementById('browseBtn');
 const sideMenu = document.getElementById('sideMenu');
 
 browseBtn.addEventListener('click', () => {
-    sideMenu.classList.toggle('open');
+  sideMenu.classList.toggle('open');
 });
 
 function closeSideMenu() {
@@ -46,8 +15,142 @@ function toggleSubMenu(id) {
   submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
 }
 
-// search bar
+// Wait for DOM to be fully loaded
+document.addEventListener("DOMContentLoaded", function () {
+  const API_BASE_URL = 'http://localhost:8080';
 
+  // Configuration for different pages
+  const pageConfig = {
+    'index.html': {
+      container: '.movies',
+      endpoint: '/movies/top-rated',
+      hasLoadMore: false
+    },
+    'action.html': {
+      container: '.action',
+      endpoint: '/movies/discover/action',
+      hasLoadMore: true
+    },
+    'adventure.html': {
+      container: '.adventure',
+      endpoint: '/movies/discover/adventure',
+      hasLoadMore: true
+    },
+    'Comedy.html': {
+      container: '.comedy',
+      endpoint: '/movies/discover/comedy',
+      hasLoadMore: true
+    },
+    'War.html': {
+      container: '.war',
+      endpoint: '/movies/discover/war',
+    },
+    'Drama.html': {
+      container: '.drama',
+      endpoint: '/movies/discover/drama',
+      hasLoadMore: true
+    },
+    'Horror.html': {
+      container: '.horror',
+      endpoint: '/movies/discover/horror',
+      hasLoadMore: true
+    },
+    'Movies.html': {
+      container: '.movies',
+      endpoint: '/movies/top-rated',
+      hasLoadMore: true
+    },
+    'tvshows.html': {
+      container: '.tv-shows',
+      endpoint: '/tv/top-rated',
+      hasLoadMore: true
+    },
+    'Alltime.html': {
+      container: '.all-time',
+      endpoint: '/movies/top-rated',
+      hasLoadMore: true
+    },
+    'ThisYear.html': {
+      container: '.year',
+      endpoint: '/movies/this-year',
+      hasLoadMore: true
+    },
+    'Trendingtoday.html': {
+      container: '.Trending-today',
+      endpoint: '/movies/trending/day',
+      hasLoadMore: true
+    },
+    'ThisWeek.html': {
+      container: '.week',
+      endpoint: '/movies/trending/week',
+      hasLoadMore: true
+    },
+  };
+
+  const currentPath = window.location.pathname.split('/').pop() || '/';
+  const config = pageConfig[currentPath];
+
+  if (!config) return;
+
+  const movieContainer = document.querySelector(config.container);
+  const loadMoreBtn = config.hasLoadMore ? document.getElementById('loadMoreBtn') : null;
+  let currentPage = 1;
+
+  const fetchMovies = async (page = 1) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${config.endpoint}?page=${page}`);
+      if (!response.ok) throw new Error('Network response was not ok');
+      return await response.json();
+    } catch (error) {
+      console.error('Error fetching movies:', error);
+      movieContainer.innerHTML = '<p class="text-white">Failed to load movies. Please try again later.</p>';
+      return null;
+    }
+  };
+
+  const displayMovies = (movies) => {
+    const fragment = document.createDocumentFragment();
+
+    movies.forEach(movie => {
+      if (!movie.poster_path) return;
+
+      const movieCard = document.createElement('div');
+      movieCard.classList.add('movie-card');
+      movieCard.innerHTML = `
+        <a href="movie-details.html?id=${movie.id}" style="text-decoration: none; color: inherit;">
+          <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" 
+               alt="${movie.title}" 
+               class="movie-img"
+               loading="lazy">
+          <h3>${movie.title}</h3>
+          <p class="text-warning">Rating: ${movie.vote_average.toFixed(1)}</p>
+        </a>
+      `;
+      fragment.appendChild(movieCard);
+    });
+
+    movieContainer.appendChild(fragment);
+  };
+
+  const loadMovies = async () => {
+    const data = await fetchMovies(currentPage);
+    if (data) {
+      if (currentPage === 1) movieContainer.innerHTML = '';
+      displayMovies(data.results);
+    }
+  };
+
+  if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+      currentPage++;
+      loadMovies();
+    });
+  }
+
+  loadMovies();
+});
+
+// search bar
 function handleSearch(event) {
   event.preventDefault();
 
@@ -57,3 +160,89 @@ function handleSearch(event) {
   }
 }
 
+document.addEventListener("DOMContentLoaded", function () {
+  const API_BASE_URL = 'http://localhost:8080';
+
+  const urlquery = new URLSearchParams(window.location.search);
+  const query = urlquery.get('query');
+
+  if (!query) return;
+
+  document.getElementById('searchQuery').textContent = query;
+
+  const searchUrl = `${API_BASE_URL}/movies/search?query=${encodeURIComponent(query)}`;
+
+  fetch(searchUrl)
+    .then(response => response.json())
+    .then(data => {
+      const resultsContainer = document.getElementById('resultsContainer');
+
+      if (!data.results || data.results.length === 0) {
+        resultsContainer.innerHTML = '<p class="text-white">No results found.</p>';
+        return;
+      }
+
+      data.results.forEach(item => {
+        if (!item.poster_path) return;
+
+        const title = item.title || item.name || "No Title";
+        const type = item.media_type === 'tv' ? 'tv' : 'movie';
+        const detailPage = type === 'tv' ? 'tv-details.html' : 'movie-details.html';
+
+        const card = document.createElement('div');
+        card.classList.add('movie-card');
+        card.innerHTML = `
+          <a href="${detailPage}?id=${item.id}" style="text-decoration: none; color: inherit;">
+            <img src="https://image.tmdb.org/t/p/w500${item.poster_path}" 
+                 alt="${title}" 
+                 style="width: 200px; border-radius: 10px;" 
+                 loading="lazy">
+            <h5 class="mt-2 text-white text-center">${title}</h5>
+          </a>
+        `;
+        resultsContainer.appendChild(card);
+      });
+    })
+    .catch(error => {
+      console.error('Search error:', error);
+      document.getElementById('resultsContainer').innerHTML = '<p class="text-white">Error loading results.</p>';
+    });
+});
+
+// movie details
+document.addEventListener("DOMContentLoaded", function () {
+  const API_BASE_URL = 'http://localhost:8080';
+
+  const params = new URLSearchParams(window.location.search);
+  const movieId = params.get('id');
+  const detailsContainer = document.getElementById('movieDetails');
+
+  if (!movieId) {
+    detailsContainer.innerHTML = "<p class='text-white'>Movie ID not found in URL.</p>";
+    return;
+  }
+
+  const detailsUrl = `${API_BASE_URL}/movies/details/${movieId}`;
+
+  fetch(detailsUrl)
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to fetch movie details.");
+      return response.json();
+    })
+    .then(movie => {
+      const poster = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '';
+      detailsContainer.innerHTML = `
+        <div class="text-white text-center">
+          <h2>${movie.title}</h2>
+          <img src="${poster}" alt="${movie.title}" class="my-3" style="border-radius: 10px; max-width: 300px;">
+          <p><strong>Release Date:</strong> ${movie.release_date}</p>
+          <p><strong>Rating:</strong> ${movie.vote_average}</p>
+          <p><strong>Overview:</strong> ${movie.overview}</p>
+        </div>
+      `;
+    })
+    .catch(error => {
+      console.error('Details error:', error);
+      detailsContainer.innerHTML = "<p class='text-white'>Error loading movie details.</p>";
+    });
+});
