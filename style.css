@@ -4,6 +4,18 @@ body {
   color: white;
 }
 
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), #222), url('raw/bg-1.jpg') no-repeat center center / cover;
+  filter: blur(6px);
+  z-index: 0;
+}
+
 header {
   z-index: 2;
   height: 90px;
@@ -98,7 +110,6 @@ header {
   margin-top: 20px;
 }
 
-
 .banner {
   position: relative;
   height: 100vh;
@@ -106,18 +117,6 @@ header {
   align-items: center;
   justify-content: center;
   color: white;
-}
-
-.banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), #222), url('raw/bg-1.jpg') no-repeat center center / cover;
-  filter: blur(6px);
-  z-index: 0;
 }
 
 .banner-content {
@@ -176,6 +175,20 @@ header {
 
 .movie-card:hover {
   transform: scale(1.05); 
+}
+
+.addwatchlist,
+.stream{
+width: 10rem;
+}
+
+
+footer,
+.movie-list,
+.home,
+.movie-details{
+  z-index: 1;
+  position:relative
 }
 
 

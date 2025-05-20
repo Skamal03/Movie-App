@@ -230,19 +230,74 @@ document.addEventListener("DOMContentLoaded", function () {
       return response.json();
     })
     .then(movie => {
+      const genres = movie.genres.map(g => g.name).join(', ');
+      const companies = movie.production_companies.map(c => c.name).join(', ');
+      const language = movie.original_language.toUpperCase();
       const poster = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '';
+
       detailsContainer.innerHTML = `
-        <div class="text-white text-center">
-          <h2>${movie.title}</h2>
-          <img src="${poster}" alt="${movie.title}" class="my-3" style="border-radius: 10px; max-width: 300px;">
-          <p><strong>Release Date:</strong> ${movie.release_date}</p>
-          <p><strong>Rating:</strong> ${movie.vote_average}</p>
-          <p><strong>Overview:</strong> ${movie.overview}</p>
+        <div class="text-white p-4">
+          <h2 class="text-center mb-5 fw-bold">${movie.title}</h2>
+
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-4">
+            <!-- Left: Poster -->
+            <div class="text-center">
+              <img src="${poster}" alt="${movie.title}" style="border-radius: 10px; max-width: 300px;">
+              <p class="mt-2 text-warning"><em>${movie.tagline || ''}</em></p>
+            </div>
+
+            <div>
+              <p><strong>Release Date:</strong> ${movie.release_date}</p>
+              <p><strong>Duration:</strong> ${movie.runtime} mins</p>
+              <p><strong>Overall Rating:</strong> ${movie.vote_average.toFixed(1)}</p>
+              <p><strong>Language:</strong> ${language}</p>
+              <p><strong>Genres:</strong> ${genres}</p>
+              <p><strong>Production:</strong> ${companies}</p>
+              <p><strong>Overview:</strong><br> ${movie.overview}</p>
+
+              <div class="mt-5 d-flex gap-3 mb-5">
+                <button class="addwatclist btn btn-warning fw-bold" onclick="addToWatchlist(movie)">Add to Watchlist</button>
+                <button class="stream btn btn-primary fw-bold">Stream</button>
+              </div>
+            </div>
+          </div>
         </div>
       `;
+
     })
     .catch(error => {
       console.error('Details error:', error);
       detailsContainer.innerHTML = "<p class='text-white'>Error loading movie details.</p>";
     });
 });
+
+
+// function addToWatchlist(movie) {
+//   fetch('http://localhost:8080/watchlist', {
+//       method: 'POST',
+//       headers: {
+//           'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify(movie)
+//   })
+//   .then(res => res.json())
+//   .then(data => alert(data.message))
+//   .catch(err => console.error('Failed to add to watchlist:', err));
+// }
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   fetch('http://localhost:8080/watchlist')
+//       .then(res => res.json())
+//       .then(movies => {
+//           const container = document.getElementById('watchlistContainer');
+//           movies.forEach(movie => {
+//               const card = document.createElement('div');
+//               card.innerHTML = `
+//                   <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
+//                   <h3>${movie.title}</h3>
+//               `;
+//               container.appendChild(card);
+//           });
+//       });
+// });
