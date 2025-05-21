@@ -185,7 +185,7 @@ width: 10rem;
 
 footer,
 .movie-list,
-.home,
+.top,
 .movie-details{
   z-index: 1;
   position:relative
