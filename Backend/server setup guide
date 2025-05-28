@@ -1,4 +1,4 @@
 server setup guide
 
 make a .env fil and write your tmdb api key
-install express axios cors dotenv libraries through
+npm install express axios cors dotenv path fs mongoose 
