@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
                class="movie-img"
                loading="lazy">
           <h3>${movie.title}</h3>
-          <p class="text-warning">Rating: ${movie.vote_average.toFixed(1)}</p>
+          <p>Rating: ${movie.vote_average.toFixed(1)}</p>
         </a>
       `;
       fragment.appendChild(movieCard);
@@ -256,8 +256,8 @@ document.addEventListener("DOMContentLoaded", function () {
               <p><strong>Overview:</strong><br> ${movie.overview}</p>
 
               <div class="mt-5 d-flex gap-3 mb-5">
-                <button class="addwatclist btn btn-warning fw-bold" onclick="addToWatchlist(movie)">Add to Watchlist</button>
-                <button class="stream btn btn-primary fw-bold">Stream</button>
+                <button class="addwatclist btn btn-warning fw-bold">Add to Watchlist</button>
+                <button class="stream btn btn-primary fw-bold" onclick="streamMovie(${movie.id})">Stream</button>
               </div>
             </div>
           </div>
@@ -271,33 +271,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
-
-// function addToWatchlist(movie) {
-//   fetch('http://localhost:8080/watchlist', {
-//       method: 'POST',
-//       headers: {
-//           'Content-Type': 'application/json'
-//       },
-//       body: JSON.stringify(movie)
-//   })
-//   .then(res => res.json())
-//   .then(data => alert(data.message))
-//   .catch(err => console.error('Failed to add to watchlist:', err));
-// }
-
-
-// document.addEventListener('DOMContentLoaded', () => {
-//   fetch('http://localhost:8080/watchlist')
-//       .then(res => res.json())
-//       .then(movies => {
-//           const container = document.getElementById('watchlistContainer');
-//           movies.forEach(movie => {
-//               const card = document.createElement('div');
-//               card.innerHTML = `
-//                   <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}" />
-//                   <h3>${movie.title}</h3>
-//               `;
-//               container.appendChild(card);
-//           });
-//       });
-// });
+// straming movies
+function streamMovie(tmdb_id) {
+  const player = document.createElement('div');
+  player.innerHTML = `
+    <div class="video-modal" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); display:flex; justify-content:center; align-items:center; z-index:9999;">
+      <video id="videoPlayer" controls width="80%" style="outline: none;">
+        <source src="http://localhost:8080/stream/${tmdb_id}" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <button onclick="this.parentElement.remove()" style="position:absolute; top:20px; right:30px; font-size:25px; color:white; background:none; border:none; cursor:pointer;">&times;</button>
+      <button onclick="document.getElementById('videoPlayer').requestFullscreen()" style="position:absolute; bottom:20px; right:30px; font-size:16px; color:white; background:#333; border:none; padding:8px 12px; cursor:pointer;">Fullscreen</button>
+    </div>
+  `;
+  document.body.appendChild(player);
+}
