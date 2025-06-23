@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Login / Signup</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<style>
+
+.authorization {
+  background: #222;
+  padding: 30px;
+  border-radius: 8px;
+  width: 350px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: 0.3s;
+}
+
+.tab.active {
+  border-color: #ff6347;
+  font-weight: bold;
+}
+
+form {
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+
+form.active {
+  display: flex;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+button {
+  width: 100%;
+  box-sizing: border-box;
+  max-width: none;
+  border-radius: 5px;
+  padding: 12px;
+  margin-bottom: 15px;
+  color: #eee;
+  background: #333;
+  border: none;
+  font-size: 1em;
+}
+
+button {
+  background: #ff6347;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  color: white;
+  margin-bottom: 0;
+}
+
+button:hover {
+  background: #ff3f21;
+}
+
+.message {
+  margin-top: 10px;
+  font-size: 0.9em;
+  color: #ff3f21;
+  text-align: center;
+  width: 100%;
+}
+
+#logged-in-container {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  text-align: center;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  min-width: 300px;
+}
+
+#logout-btn {
+  width: 150px;
+  padding: 12px;
+  background: #ff6347;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+
+}
+
+#logout-btn:hover {
+  background-color: #c72a12;
+}
+
+</style>
+
+<body>
+
+  <header class="d-flex justify-content-between align-items-center p-3 flex-wrap position-relative">
+
+    <div class="d-flex align-items-center gap-3">
+      <button class="browse-btn btn" id="browseBtn">
+        <img src="raw/menu-w.png" alt="Menu" width="24" height="24">
+      </button>
+      <a href="index.html" class="text-white fs-2 d-none d-lg-block fw-bold" style="text-decoration: none;">Cineverse</a>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-centre gap-2">
+      <a href='Movies.html' class="head-btn btn d-none d-lg-block text-white fw-bold">Movies</a>
+      <a href='tvshows.html' class="head-btn btn  d-none d-lg-block text-white fw-bold">TV Shows</a>
+    </div>
+
+    <div class="position-absolute top-50 start-50 translate-middle d-lg-none">
+      <a href="index.html" style="text-decoration: none">
+        <div class="text-white text-center fw-bold" style="font-size: 2.5rem;">Cineverse</div>
+      </a>
+    </div>
+
+
+    <div class="d-flex justify-content-center text-center align-items-center gap-2">
+      <a href="watchlist.html" class="watchlist-btn btn d-none d-lg-block" id="watchlistbtn">WatchList</a>
+      <a class="login-btn btn" id="loginbtn" href="login.html">
+        <img src="raw/login-4.png" alt="Menu" width="30" height="30">
+      </a>
+    </div>
+  
+
+    <div class="side-menu" id="sideMenu">
+      <ul class="list-unstyled">
+        <li>
+          <div class="back">
+            <button class="menu-btn fs-3"><img src="raw/back.png" alt="Menu" width="35" height="35" onclick="closeSideMenu()"> Back</button>
+          </div>
+        </li>
+        <li>
+            <a href="watchlist.html" class="menu-btn btn d-lg-none">WatchList</a>
+        </li>
+        <li>
+          <a href='Movies.html' class="menu-btn btn bg-danger d-lg-none">Movies</a>
+      </li>
+      <li>
+        <a href='tvshows.html' class="menu-btn btn bg-danger d-lg-none">TV Shows</a>
+      </li>
+        <li>
+          <button class="menu-btn" onclick="toggleSubMenu('genres')">Genres ▾</button>
+          <ul class="submenu" id="genres">
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='action.html' class="btn text-white btn-outline-danger category-btn" data-category="Action">Action</a>
+              <a href='Comedy.html' class="btn text-white btn-outline-danger category-btn" data-category="Comedy">Comedy</a>
+            </div>
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='Drama.html' class="btn text-white btn-outline-danger category-btn" data-category="Drama">Drama</a>
+              <a onclick="location.href='adventure.html'" class="btn text-white btn-outline-danger category-btn" data-category="Adventure">Adventure</a>
+            </div>
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='Horror.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">Horror</a>
+              <a href='War.html' class="btn text-white btn-outline-danger category-btn" data-category="War">War</a>
+            </div>
+          </ul>
+        </li>
+        <li>
+          <button class="menu-btn" onclick="toggleSubMenu('trending')">Trending ▾</button>
+          <ul class="submenu" id="trending">
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='Trendingtoday.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">Today</a>
+              <a href='ThisWeek.html' class="btn text-white btn-outline-danger category-btn" data-category="War">This Week</a>
+            </div>
+          </ul>
+        </li>
+        <li>
+          <button class="menu-btn" onclick="toggleSubMenu('topRated')">Top Rated ▾</button>
+          <ul class="submenu" id="topRated">
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='Alltime.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">All Time</a>
+              <a href='ThisYear.html' class="btn text-white btn-outline-danger category-btn" data-category="War">This Year</a>
+            </div>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+<div class="authorization">
+  <div class="tabs">
+    <div class="tab active" id="login-tab">Login</div>
+    <div class="tab" id="signup-tab">Signup</div>
+  </div>
+
+  <form class="login" id="login-form" class="active">
+    <input type="email" id="login-email" placeholder="Email" required />
+    <input type="password" id="login-password" placeholder="Password" required />
+    <button type="submit">Login</button>
+    <div class="message" id="login-message"></div>
+  </form>
+
+  <form class="signup" id="signup-form">
+    <input type="text" id="signup-username" placeholder="Username" required />
+    <input type="email" id="signup-email" placeholder="Email" required />
+    <input type="password" id="signup-password" placeholder="Password" required />
+    <button type="submit">Signup</button>
+    <div class="message" id="signup-message"></div>
+  </form>
+</div>
+
+<div id="logged-in-container">
+  <div class="fw-bold fs-2 mb-3 text-white px-5 py-4" id="welcome-message"></div>
+  <button class="logout-btn mb-3" id="logout-btn">
+    Logout
+  </button>
+</div>
+
+<script src="script.js"></script>
+<script>
+  const loginTab = document.getElementById('login-tab');
+  const signupTab = document.getElementById('signup-tab');
+  const loginForm = document.getElementById('login-form');
+  const signupForm = document.getElementById('signup-form');
+
+  loginTab.classList.add('active');
+  signupTab.classList.remove('active');
+  loginForm.classList.add('active');
+  signupForm.classList.remove('active');
+
+  loginTab.addEventListener('click', () => {
+    loginTab.classList.add('active');
+    signupTab.classList.remove('active');
+    loginForm.classList.add('active');
+    signupForm.classList.remove('active');
+    clearMessages();
+  });
+
+  signupTab.addEventListener('click', () => {
+    signupTab.classList.add('active');
+    loginTab.classList.remove('active');
+    signupForm.classList.add('active');
+    loginForm.classList.remove('active');
+    clearMessages();
+  });
+
+  function clearMessages() {
+    document.getElementById('login-message').textContent = '';
+    document.getElementById('signup-message').textContent = '';
+  }
+
+  // Login form submit handler
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearMessages();
+
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value.trim();
+
+    if (!email || !password) {
+      document.getElementById('login-message').textContent = 'Please fill in all fields.';
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:8080/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        localStorage.setItem('token', data.token);
+
+        localStorage.setItem('user', JSON.stringify(data.user));
+
+        document.querySelector('.authorization').style.display = 'none';
+
+        const loggedInContainer = document.getElementById('logged-in-container');
+        const welcomeDiv = document.getElementById('welcome-message');
+        
+        welcomeDiv.textContent = `Welcome, ${data.user.username}! You are logged in.`;
+        loggedInContainer.style.display = 'block';
+        
+        alert(`Login successful! Welcome, ${data.user.username}!`);  
+      } else {
+        document.getElementById('login-message').style.color = '#ff3c78';
+        document.getElementById('login-message').textContent = data.message || 'Login failed';
+      }
+    } catch (err) {
+      document.getElementById('login-message').style.color = '#ff3c78';
+      document.getElementById('login-message').textContent = 'Server error, try again later.';
+    }
+  });
+
+  // Signup form submit handler
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearMessages();
+
+    const username = document.getElementById('signup-username').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value.trim();
+
+    if (!username || !email || !password) {
+      document.getElementById('signup-message').textContent = 'Please fill in all fields.';
+      return;
+    }
+
+    try {
+      const res = await fetch('http://localhost:8080/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        document.getElementById('signup-message').style.color = 'lightgreen';
+        document.getElementById('signup-message').textContent = 'Signup successful! You can now login.';
+        setTimeout(() => {
+          loginTab.click();
+          clearMessages();
+          loginForm.reset();
+          signupForm.reset();
+        }, 2000);
+      } else {
+        document.getElementById('signup-message').style.color = '#ff3c78';
+        document.getElementById('signup-message').textContent = data.message || 'Signup failed';
+      }
+    } catch (err) {
+      document.getElementById('signup-message').style.color = '#ff3c78';
+      document.getElementById('signup-message').textContent = 'Server error, try again later.';
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      document.querySelector('.authorization').style.display = 'none';
+
+      const userData = localStorage.getItem('user');
+      let username = 'User';
+      if (userData) {
+        try {
+          const user = JSON.parse(userData);
+          username = user.username || username;
+        } catch {
+        }
+      }
+
+      const welcomeDiv = document.getElementById('welcome-message');
+      const loggedInContainer = document.getElementById('logged-in-container');
+
+      welcomeDiv.textContent = `Welcome back, ${username}! You are logged in.`;
+      loggedInContainer.style.display = 'block';
+    }
+  });
+
+  const logoutBtn = document.getElementById('logout-btn');
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('token');
+
+    localStorage.removeItem('user');
+
+    document.querySelector('.authorization').style.display = 'flex';
+
+    document.getElementById('logged-in-container').style.display = 'none';
+
+    loginTab.click();
+    loginForm.reset();
+    signupForm.reset();
+  });
+</script>
+
+
+
+
+
+</body>
+</html>

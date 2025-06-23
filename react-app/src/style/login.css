@@ -1,0 +1,118 @@
+.login-page .authorization {
+    background: #222;
+    border: 3px solid #ff6347;
+    padding: 30px;
+    border-radius: 8px;
+    width: 450px;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .login-page .tabs {
+    display: flex;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  .login-page .tab {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: 0.3s;
+  }
+  
+  .login-page .tab.active {
+    border-color: #ff6347;
+    font-weight: bold;
+  }
+  
+  .login-page form {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .login-page form.active {
+    display: flex;
+  }
+  
+  .login-page input[type="text"],
+  .login-page input[type="email"],
+  .login-page input[type="password"],
+  .login-page button {
+    width: 100%;
+    box-sizing: border-box;
+    max-width: none;
+    border-radius: 5px;
+    padding: 12px;
+    margin-bottom: 15px;
+    color: #eee;
+    background: #333;
+    border: none;
+    font-size: 1em;
+  }
+  
+  .login-page .login,
+  .login-page .signup {
+    background: #ff6347;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    color: white;
+    margin-bottom: 0;
+  }
+  
+  .login-page button:hover {
+    background: #ff3f21;
+  }
+  
+  .login-page .message {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #ff3f21;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .login-page #logged-in-container {
+    position: absolute;
+    border: 3px solid #ff6347;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -80%);
+    display: block; 
+    text-align: center;
+    padding: 20px;
+    background-color: #333;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    min-width: 300px;
+    color: white; 
+    z-index: 2;  
+  }
+  
+  .login-page .logout-btn {
+    width: 150px;
+    padding: 12px;
+    background: #ff6347;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    z-index: 1;
+  }
+  
+  .login-page #logout-btn:hover {
+    background-color: #c72a12;
+  }
+  

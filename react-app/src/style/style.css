@@ -1,0 +1,67 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: black;
+  color: black
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(37, 37, 37, 0.658), #131313), url('../assets/bg-4.png') no-repeat center center / cover;
+  filter: blur(2px);
+  z-index: 0;
+}
+
+footer,
+.movie-list,
+.top,
+.movie-details,
+.trending-section,
+.container,
+.addform,
+.watchlistcontainer,
+.wlheading,
+#loadMoreBtn,
+.tvcontainer{
+  z-index: 1;
+  position:relative
+}
+
+.video-modal{
+  z-index: 2;
+}
+
+.remove-btn {
+  background-color: #dc3545;
+  color: white;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.remove-btn:hover{
+  background-color: #f82a2a;
+}
+
+
+.epicontainer{
+  overflow-x: auto; 
+  scrollbar-width: thin; 
+  scrollbar-color: #dc3545 #33333300;  
+  white-space: nowrap; 
+  display: flex; 
+  gap: 1rem; 
+  padding-bottom: 1rem;
+}
+
+
+footer {
+  padding: 20px;
+  background-color: #1b1b1b;
+  font-size: 18px;
+  text-align: center;
+}

@@ -1,0 +1,40 @@
+header {
+    z-index: 2;
+    height: 90px;
+    background-color: #1b1b1b;
+  }
+  
+  header .watchlist-btn,
+  header .login-btn,
+  header .browse-btn,
+  header .category-btn {
+    border-radius: 10px !important;
+    cursor: pointer;
+    color: white !important;
+  }
+  
+  header .watchlist-btn {
+    border: 3px solid #ff6347 !important;
+    width: 120px !important;
+  }
+  
+  header .login-btn,
+  header .browse-btn {
+    background-color: #ff6347 !important;
+    border: 5px solid #ff6347 !important;
+  }
+  
+  header .login-btn:hover,
+  header .browse-btn:hover,
+  header .watchlist-btn:hover,
+  header .head-btn:hover {
+    background-color: #ff3f21 !important;
+  }
+  
+  header .head-btn {
+    background-color: #ff6347 !important;
+    border: 5px solid #ff6347 !important;
+    width: 120px !important;
+    border-radius: 10px !important;
+    cursor: pointer;
+  }

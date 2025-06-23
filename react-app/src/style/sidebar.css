@@ -1,0 +1,140 @@
+.side-menu {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    transition: left 0.5s ease;
+    padding-top: 60px;
+    z-index: 2;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #dc3545 #333;
+  }
+  
+  .side-menu.open {
+    left: 0;
+  }
+  
+  .menu-list {
+    border-radius: 5px;
+    list-style: none;
+    padding: 0 15px;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .menu-list li {
+    width: 100%;
+  }
+  
+  .menu-btn {
+    border-radius: 8px;
+    background: none;
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    width: 100%;
+    text-align: left;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .back-btn {
+    font-size: 20px;
+  }
+  
+  .simple-link {
+    display: block;
+    padding: 10px 0;
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    text-align: center;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .simple-link.menu-btn[href="/watchlist"] {
+    background-color: #383838;
+    border: 2px solid #dc3545;
+  }
+  
+  .simple-link.menu-btn[href="/watchlist"]:hover {
+    background-color: #b52a2a;
+    border-color: #b52a2a;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .simple-link.menu-btn[href="/movies"],
+  .simple-link.menu-btn[href="/tvshows"] {
+    background-color: #ff6347;
+    border: 2px solid #ff6347;
+    color: white;
+  }
+  
+  .simple-link.menu-btn[href="/movies"]:hover,
+  .simple-link.menu-btn[href="/tvshows"]:hover {
+    background-color: #cc8400;
+    border-color: #cc8400;
+    cursor: pointer;
+  }
+  
+  .menu-btn.submenu-toggle {
+    border-radius: 12px;
+    background-color: transparent;
+    color: white;
+    padding: 10px 15px;
+    border: 1.5px solid transparent;
+    font-weight: bold;
+    justify-content: space-between;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  
+  .menu-btn.submenu-toggle:hover {
+    background-color: #dc3545;
+    border-color: #dc3545;
+    cursor: pointer;
+  }
+  
+  .submenu {
+    border-radius: 10px;
+    list-style: none;
+    padding-left: 15px;
+    margin-top: 10px;
+    display: none;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .submenu.open {
+    display: flex;
+  }
+  
+  .submenu li {
+    width: 100%;
+  }
+  
+  /* Submenu links */
+  .submenu-link {
+    color: white;
+    text-decoration: none;
+    border: 1.5px solid #dc3545;
+    padding: 8px 12px;
+    border-radius: 12px;
+    display: block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  
+  .submenu-link:hover {
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+  }
+  

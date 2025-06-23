@@ -1,0 +1,46 @@
+.add-movie-form {
+    position: relative;
+    z-index: 1;
+    background-color: #2e2e2e;
+    border: 3px solid #ff6347;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px;
+    margin: 50px auto;
+  }
+  
+  .add-movie-form input {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    z-index: 1;
+  }
+  
+  .add-movie-form button {
+    padding: 10px;
+    background-color: #ff6347;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    z-index: 1;
+  }
+  
+  .add-movie-form button:hover {
+    background-color: darkorange;
+    z-index: 1;
+  }
+  
+  .add-movie-top .back-btn {
+    background-color: #ff6347;
+    border-radius: 10px;
+    z-index: 1;
+  }
+  

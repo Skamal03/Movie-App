@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>TV Show Details</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="d-flex justify-content-between align-items-center p-3 flex-wrap position-relative">
+
+    <div class="d-flex align-items-center gap-3">
+      <button class="browse-btn btn" id="browseBtn">
+        <img src="raw/menu-w.png" alt="Menu" width="24" height="24">
+      </button>
+      <a href="index.html" class="text-white fs-2 d-none d-lg-block fw-bold" style="text-decoration: none;">Cineverse</a>
+    </div>
+
+    <div class="d-flex justify-content-center align-items-centre gap-2">
+      <a href='Movies.html' class="head-btn btn d-none d-lg-block text-white fw-bold">Movies</a>
+      <a href='tvshows.html' class="head-btn btn  d-none d-lg-block text-white fw-bold">TV Shows</a>
+    </div>
+
+    <div class="position-absolute top-50 start-50 translate-middle d-lg-none">
+      <a href="index.html" style="text-decoration: none">
+        <div class="text-white text-center fw-bold" style="font-size: 2.5rem;">Cineverse</div>
+      </a>
+    </div>
+
+
+    <div class="d-flex justify-content-center text-center align-items-center gap-2">
+      <a href="watchlist.html" class="watchlist-btn btn d-none d-lg-block" id="watchlistbtn">WatchList</a>
+      <a class="login-btn btn" id="loginbtn" href="login.html">
+        <img src="raw/login-4.png" alt="Menu" width="30" height="30">
+      </a>
+    </div>
+  
+
+    <div class="side-menu" id="sideMenu">
+      <ul class="list-unstyled">
+        <li>
+          <div class="back">
+            <button class="menu-btn fs-3"><img src="raw/back.png" alt="Menu" width="35" height="35" onclick="closeSideMenu()"> Back</button>
+          </div>
+        </li>
+        <li>
+            <a href="watchlist.html" class="menu-btn btn d-lg-none">WatchList</a>
+        </li>
+        <li>
+          <a href='Movies.html' class="menu-btn btn bg-danger d-lg-none">Movies</a>
+      </li>
+      <li>
+        <a href='tvshows.html' class="menu-btn btn bg-danger d-lg-none">TV Shows</a>
+      </li>
+        <li>
+          <button class="menu-btn" onclick="toggleSubMenu('genres')">Genres ▾</button>
+          <ul class="submenu" id="genres">
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='action.html' class="btn text-white btn-outline-danger category-btn" data-category="Action">Action</a>
+              <a href='Comedy.html' class="btn text-white btn-outline-danger category-btn" data-category="Comedy">Comedy</a>
+            </div>
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='Drama.html' class="btn text-white btn-outline-danger category-btn" data-category="Drama">Drama</a>
+              <a onclick="location.href='adventure.html'" class="btn text-white btn-outline-danger category-btn" data-category="Adventure">Adventure</a>
+            </div>
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='Horror.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">Horror</a>
+              <a href='War.html' class="btn text-white btn-outline-danger category-btn" data-category="War">War</a>
+            </div>
+          </ul>
+        </li>
+        <li>
+          <button class="menu-btn" onclick="toggleSubMenu('trending')">Trending ▾</button>
+          <ul class="submenu" id="trending">
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='Trendingtoday.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">Today</a>
+              <a href='ThisWeek.html' class="btn text-white btn-outline-danger category-btn" data-category="War">This Week</a>
+            </div>
+          </ul>
+        </li>
+        <li>
+          <button class="menu-btn" onclick="toggleSubMenu('topRated')">Top Rated ▾</button>
+          <ul class="submenu" id="topRated">
+            <div class="d-flex flex-column flex-lg-row gap-2 mb-2">
+              <a href='Alltime.html' class="btn text-white btn-outline-danger category-btn" data-category="Horror">All Time</a>
+              <a href='ThisYear.html' class="btn text-white btn-outline-danger category-btn" data-category="War">This Year</a>
+            </div>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <div id="tvShowDetails" class="tvcontainer"></div>
+
+  <script src="script.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const token = localStorage.getItem('token');
+  
+      const urlParams = new URLSearchParams(window.location.search);
+      const tvId = urlParams.get('id');
+      const detailsContainer = document.getElementById('tvShowDetails');
+  
+      fetch(`http://localhost:8080/movies/tv/details/${tvId}`)
+        .then(response => {
+          if (!response.ok) throw new Error("Failed to fetch TV show details.");
+          return response.json();
+        })
+        .then(show => {
+          const genres = show.genres.map(g => g.name).join(', ');
+          const language = show.original_language.toUpperCase();
+          const poster = show.poster_path ? `https://image.tmdb.org/t/p/w500${show.poster_path}` : '';
+  
+          const seasonOptions = show.seasons.map(season =>
+            `<option value="${season.season_number}">Season ${season.season_number}</option>`
+          ).join('');
+  
+          detailsContainer.innerHTML = `
+          <div class="text-white p-4 container">
+            <h2 class="text-center mb-5 fw-bold">${show.name}</h2>
+
+            <div class="row gx-5">
+              <!-- Poster -->
+              <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
+                <img src="${poster}" alt="${show.name}" class="img-fluid rounded" style="max-width: 100%;">
+                <p class="mt-2 text-warning"><em>${show.tagline || ''}</em></p>
+              </div>
+
+              <!-- Show Info -->
+              <div class="col-12 col-md-8 text-start px-md-4">
+                <p><strong>First Air Date:</strong> ${show.first_air_date}</p>
+                <p><strong>Status:</strong> ${show.status}</p>
+                <p><strong>Language:</strong> ${language}</p>
+                <p><strong>Genres:</strong> ${genres}</p>
+                <p><strong>Overview:</strong><br> ${show.overview}</p>
+
+                <button id="addToWatchlistBtn" class="addwatchlist btn btn-warning mb-3 fw-bold w-100 w-sm-auto">
+                  + Add to Watchlist
+                </button>
+
+                <div class="mt-3">
+                  <label for="seasonSelect" class="mb-2"><strong>Seasons:</strong></label>
+                  <select id="seasonSelect" class="form-select" style="background-color: #292626; color: white; border: 1px solid #555; border-radius: 5px; max-width: 240px;">
+                    ${seasonOptions}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="px-3 mt-4">Episodes</h4>
+            </div>
+            <div id="episodesContainer" class="epicontainer px-3">
+            </div>
+          </div>
+        `;
+          // Add to Watchlist button logic (with login check)
+          document.getElementById('addToWatchlistBtn').addEventListener('click', () => {
+            if (!token) {
+              alert('Please log in to add to your watchlist.');
+              window.location.href = 'login.html';
+              return;
+            }
+  
+            fetch('http://localhost:8080/api/watchlist', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+              },
+              body: JSON.stringify({
+                itemId: show.id,
+                mediaType: 'tv',
+                title: show.name,
+                posterPath: show.poster_path,
+                overview: show.overview
+              })
+            })
+            .then(res => res.json())
+            .then(data => alert('Added to watchlist!'))
+            .catch(err => alert('Failed to add to watchlist'));
+          });
+  
+          loadEpisodes(tvId, show.seasons[0].season_number);
+  
+          // On season change
+          document.getElementById('seasonSelect').addEventListener('change', (e) => {
+            const seasonNum = parseInt(e.target.value);
+            loadEpisodes(tvId, seasonNum);
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching TV show details:', error);
+          detailsContainer.innerHTML = "<p class='text-white'>Error loading TV show details.</p>";
+        });
+  
+      function loadEpisodes(tvId, seasonNumber) {
+        const episodesContainer = document.getElementById('episodesContainer');
+        episodesContainer.innerHTML = '<p>Loading episodes...</p>';
+  
+        fetch(`http://localhost:8080/movies/tv/${tvId}/season/${seasonNumber}`)
+          .then(response => {
+            if (!response.ok) throw new Error("Failed to fetch season details.");
+            return response.json();
+          })
+          .then(season => {
+            if (!season.episodes || season.episodes.length === 0) {
+              episodesContainer.innerHTML = '<p>No episodes found.</p>';
+              return;
+            }
+            const episodesHTML = season.episodes.map(ep => `
+            <div class="d-flex flex-wrap gap-3">
+              <div class="episode p-3 flex-fill" style="border: 1px solid #555; border-radius: 8px; min-width: 250px; text-align: center;">
+                <h5>Episode ${ep.episode_number}: ${ep.name}</h5>
+                <p><strong>Air Date:</strong> ${ep.air_date || 'N/A'}</p>
+                <p class="text-start">${ep.overview || 'No overview available.'}</p>
+              </div>
+            </div>
+            `).join('');
+  
+            episodesContainer.innerHTML = `
+            
+              ${episodesHTML}
+            `;
+          })
+          .catch(error => {
+            episodesContainer.innerHTML = '<p>Error loading episodes.</p>';
+          });
+      }
+    });
+  </script>
+  
+  
+
+<footer>
+  <p class="mb-0">&copy; 2025 MovieApp, All Rights Reserved</p>
+  <a href='Addmovie.html' class="btn text-white">Add Movie</a>
+  <a href='' class="btn text-white">Request Movie</a>
+  <a href='' class="btn text-white">About Us</a>
+</footer>
+
+</body>
+</html>

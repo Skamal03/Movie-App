@@ -1,0 +1,12 @@
+server setup guide
+
+npm install express axios cors dotenv path fs mongoose jsonwebtoken bcrypt
+
+make a .env fil and write your tmdb api key
+
+TMDB_API='your_api_key'
+MONGO_URL=your_mongodb_url
+JWT_SECRET=your_secret_key    run this code in the cmd(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")
+
+
+also create the movies folder to put the movies
